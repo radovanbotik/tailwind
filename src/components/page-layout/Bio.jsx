@@ -14,7 +14,7 @@ export const Bio = () => {
           </div>
           <div className=" flex h-full flex-1 place-content-center text-center md:text-right">
             <div className="mx:auto max-w-sm space-y-8 md:ml-auto">
-              <h1 className="font=sans text-5xl font-bold uppercase tracking-tighter">
+              <h1 className="font-sans text-5xl font-bold uppercase tracking-tighter">
                 O autorke
               </h1>
               <p>

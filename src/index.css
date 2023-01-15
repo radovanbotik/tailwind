@@ -28,7 +28,100 @@
   .h-screen-3\/4 {
     min-height: 75vh;
   }
+  .text-fill {
+    -webkit-text-fill-color: transparent;
+  }
+  .custom-shadow-border {
+    /* text-shadow: 0px 0px 40px white; */
+    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.28);
+  }
   img {
     @apply h-full w-full;
+  }
+}
+@layer base {
+  @font-face {
+    font-family: "Athelas";
+    src: url("./assets/fonts/Athelas-Regular.ttf");
+  }
+  @font-face {
+    font-family: "zemke";
+    src: url("./assets/fonts/zemke_hand_itc.ttf");
+  }
+  @font-face {
+    font-family: "sunbeat";
+    src: url("./assets/fonts/SunbeatW01Regular.ttf");
+  }
+  @font-face {
+    font-family: "kidprint";
+    src: url("./assets/fonts/KidprintMTProRegular.OTF");
+  }
+  @font-face {
+    font-family: "kidprint-bold";
+    src: url("./assets/fonts/KidprintMTProBold.OTF");
+  }
+  @font-face {
+    font-family: "misterk";
+    src: url("./assets/fonts/MisterK-OTRegular.otf");
+  }
+  @font-face {
+    font-family: "children";
+    src: url("./assets/fonts/ChildrenHandwritten.ttf");
+  }
+  @font-face {
+    font-family: "doingwise";
+    src: url("./assets/fonts/Doingwise.ttf");
+  }
+  @font-face {
+    font-family: "drawingkids";
+    src: url("./assets/fonts/DrawingKids.otf");
+  }
+  @font-face {
+    font-family: "kidshand";
+    src: url("./assets/fonts/KidsHandwriting-Regular.ttf");
+  }
+  @font-face {
+    font-family: "missinglovely";
+    src: url("./assets/fonts/MissingLovely.ttf");
+  }
+  @font-face {
+    font-family: "neubau";
+    src: url("./assets/fonts/NeubauPro.ttf");
+  }
+  @font-face {
+    font-family: "singeldust";
+    src: url("./assets/fonts/Singeldust.ttf");
+  }
+  @font-face {
+    font-family: "sweetcinnamon";
+    src: url("./assets/fonts/SweetCinnamon.ttf");
+  }
+  @font-face {
+    font-family: "verveine";
+    src: url("./assets/fonts/VerveineRegular.TTF");
+  }
+  @font-face {
+    font-family: "winterpen";
+    src: url("./assets/fonts/WinterPen22.otf");
+  }
+  @font-face {
+    font-family: "zai1870";
+    src: url("./assets/fonts/ZaiDrukarniaWydawnicza1870.ttf");
+  }
+  @font-face {
+    font-family: "zaisloppy";
+    src: url("./assets/fonts/ZaiEdSloppySimple.ttf");
+  }
+  @font-face {
+    font-family: "zaithin";
+    src: url("./assets/fonts/ZaiThinHandwrittenLettering.ttf");
+  }
+  @font-face {
+    font-family: "zaihandwritten";
+    src: url("./assets/fonts/ZaiThinHandwrittenLettering.ttf");
+  }
+  @font-face {
+    font-family: "zaigraffiti";
+    src: url("./assets/fonts/ZaiFreeHongKongGraffiti.ttf");
   }
 }

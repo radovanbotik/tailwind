@@ -15,11 +15,11 @@ const items = [
 ];
 const Card = ({ id, img, name }) => {
   return (
-    <motion.div className="relative shrink-0  overflow-hidden rounded-xl shadow-lg">
+    <motion.div className="relative shrink-0 overflow-hidden rounded-xl shadow-lg">
       <img
         src={img}
         alt=""
-        className="pointer-events-none  h-60 md:h-72 lg:h-96 xl:h-128"
+        className="pointer-events-none h-60 md:h-72 lg:h-96 xl:h-128"
       />
       <h6 className="bg-white text-center">{name}</h6>
     </motion.div>

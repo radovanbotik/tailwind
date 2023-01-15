@@ -5,10 +5,10 @@ import { BorderMaxWidth } from "../components/BorderMaxWidth";
 
 export const RootLayout = () => {
   return (
-    <div className=" bg-yellow-300 bg-slate-600">
-      <BorderMaxWidth>
+    <div className="">
+      {/* <BorderMaxWidth>
         <Navbar />
-      </BorderMaxWidth>
+      </BorderMaxWidth> */}
       <Outlet />
     </div>
   );

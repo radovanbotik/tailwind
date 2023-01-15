@@ -7,6 +7,7 @@ import pavuk from "../assets/images/pavuk.png";
 import gsap from "gsap";
 import { useLayoutEffect, useRef } from "react";
 import { ImagePreviewSlider } from "../components/page-layout/ImagePreviewSlider";
+import { BackgroundH1 } from "../components/page-layout/BackgroundH1";
 
 export const Frontpage = () => {
   const tl = useRef();
@@ -43,11 +44,9 @@ export const Frontpage = () => {
 
   return (
     <div>
-      <Header />
-      <Product runAnimation={runAnimation} />
-      <Testimonial />
-      <ImagePreviewSlider />
-      <Bio />
+      <div className="flex">
+        <Product runAnimation={runAnimation} />
+      </div>
       <div
         ref={pavukRef}
         id="pavuk"

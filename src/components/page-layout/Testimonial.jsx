@@ -9,7 +9,7 @@ export const Testimonial = () => {
           <h1 className="w-fit font-sans text-4xl font-bold uppercase tracking-tighter">
             "Lorem ipsum dolor sit amet consectetur adipisicing elit."
           </h1>
-          <h6 className="w-fit text-base tracking-tighter">
+          <h6 className="w-fit font-merriweather text-base tracking-tighter">
             - <span className="inline-block first-letter:uppercase">peter</span>{" "}
             <span className="inline-block first-letter:uppercase">johnson</span>
             , long time reader
@@ -19,7 +19,7 @@ export const Testimonial = () => {
           <h1 className="w-fit font-sans text-4xl font-bold uppercase tracking-tighter">
             "Lorem ipsum dolor sit amet consectetur adipisicing elit."
           </h1>
-          <h6 className="w-fit text-base tracking-tighter">
+          <h6 className="w-fit font-merriweather text-base tracking-tighter">
             - <span className="inline-block first-letter:uppercase">peter</span>{" "}
             <span className="inline-block first-letter:uppercase">johnson</span>
             , long time reader
