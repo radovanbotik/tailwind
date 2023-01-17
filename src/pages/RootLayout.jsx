@@ -1,14 +1,11 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { Navbar } from "../components/navigation/Navbar";
 import { BorderMaxWidth } from "../components/BorderMaxWidth";
 
 export const RootLayout = () => {
+  // useLocoScroll(true);
   return (
-    <div className="">
-      {/* <BorderMaxWidth>
-        <Navbar />
-      </BorderMaxWidth> */}
+    <div data-scroll-container className="root">
       <Outlet />
     </div>
   );
