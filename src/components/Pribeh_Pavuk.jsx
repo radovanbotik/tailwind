@@ -34,9 +34,32 @@ export const Pribeh_Pavuk = () => {
   const paragraph_1_ref = useRef(null);
   const poem_container_ref = useRef(null);
   const main_content = useRef(null);
+  const animationWrap_ref = useRef(null);
+  const poem_ref = useRef(null);
+
+  const circle_ref = useRef();
   //timelines
   const mrak_tl = useRef(null);
   const static_mrak_tl = useRef(null);
+  const circle_tl = useRef(null);
+  const poem_tl = useRef(null);
+  const scroll_func = useRef(null);
+
+  //Utility Function
+  let centerX = window.innerWidth / 2;
+  let centerY = window.innerHeight / 2;
+
+  Math.getDistance = function (x1, y1, x2, y2) {
+    var xs = x2 - x1,
+      ys = y2 - y1;
+    xs *= xs;
+    ys *= ys;
+    return Math.sqrt(xs + ys);
+  };
+
+  let radius = Math.getDistance(0, 0, centerX, centerY);
+  let fullWidth = radius * 2;
+  let percentIncrease = fullWidth / 100;
 
   useLayoutEffect(() => {
     mrak_tl.current = gsap.timeline().to(mrak_ref.current, {
@@ -84,7 +107,7 @@ export const Pribeh_Pavuk = () => {
         yoyo: true,
         ease: "power1.out",
       });
-    }, root_ref.current);
+    }, main_content.current);
     return () => context.revert();
   }, []);
 
@@ -103,54 +126,109 @@ export const Pribeh_Pavuk = () => {
     return () => slnko_ani.revert();
   }, []);
 
-  useLayoutEffect(() => {
-    const h1_ani = ScrollTrigger.create({
-      trigger: title_ref.current,
-      start: "-100% 0",
-      end: `bottom ${title_ref.current.getBoundingClientRect().height}`,
-      pin: true,
-      pinSpacing: false,
-      scrub: 2,
-    });
-    return () => h1_ani.revert();
-  }, []);
+  // useLayoutEffect(() => {
+  //   const h1_ani = ScrollTrigger.create({
+  //     trigger: title_ref.current,
+  //     start: "-100% 0",
+  //     end: `bottom ${title_ref.current.getBoundingClientRect().height}`,
+  //     pin: true,
+  //     pinSpacing: false,
+  //     scrub: 2,
+  //   });
+  //   return () => h1_ani.revert();
+  // }, []);
+
+  // useLayoutEffect(() => {
+  //   const context = gsap.context(self => {
+  //     const parent_divs = self.selector('[data-name="paragraph_container"]');
+  //     parent_divs.forEach((div, index) => {
+  //       const paragraph = div.querySelector("p");
+  //       const timeline = gsap.timeline().from(paragraph, {
+  //         y: 200,
+  //         rotateY: "30deg",
+  //         ease: "power3.out",
+  //       });
+  //       ScrollTrigger.create({
+  //         trigger: div,
+  //         start: "0 100%",
+  //         end: "100% 50%",
+  //         scrub: 1,
+  //         toggleActions: "play none none reverse",
+  //         animation: timeline,
+  //       });
+  //     });
+  //   }, poem_container_ref);
+
+  //   return () => context.revert();
+  // }, []);
 
   useLayoutEffect(() => {
     const context = gsap.context(self => {
-      const parent_divs = self.selector('[data-name="paragraph_container"]');
-      parent_divs.forEach((div, index) => {
-        const paragraph = div.querySelector("p");
-        const timeline = gsap.timeline().from(paragraph, {
-          y: 200,
-          rotateY: "30deg",
-          ease: "power3.out",
-        });
-        ScrollTrigger.create({
-          trigger: div,
-          start: "0 100%",
-          end: "100% 50%",
-          scrub: 1,
-          toggleActions: "play none none reverse",
-          animation: timeline,
-        });
-      });
-    }, poem_container_ref);
+      circle_tl.current = gsap
+        .timeline({ onComplete: scroll_func.current })
+        // .to(circle_ref.current, { x: "90vw" })
+        // .to(circle_ref.current, {
+        //   x: "50vw",
+        //   scale: percentIncrease,
+        //   duration: 1,
+        //   ease: "power1.in",
+        // })
+        // .to(circle_ref.current, {
+        //   x: "50vw",
+        //   duration: 1,
+        //   ease: "power1.in",
+        // })
+        .set(animationWrap_ref.current, { opacity: 1 })
+        .from(
+          title_ref.current,
+          { xPercent: -100, opacity: 0, duration: 1 },
+          "<"
+        )
+        .from(
+          pavuk_ref.current,
+          { scale: 0.3, opacity: 0, duration: 0.5 },
+          "<+0.5"
+        )
 
+        .duration(5);
+    }, main_content.current);
     return () => context.revert();
+  }, []);
+  useLayoutEffect(() => {
+    const context = gsap.context(self => {
+      poem_tl.current = gsap
+        .timeline({ paused: true })
+        .to(title_ref.current, { y: -100, opacity: 0 })
+        .set(poem_ref.current, { opacity: 1 }, "<")
+        .from("[data-name='vers']", { opacity: 0, scale: 0, stagger: 1 }, "<")
+        .to("[data-name='vers']", { opacity: 0, scale: 2, stagger: 1 }, "<+1")
+        .to(slnko_ref.current, { opacity: 0 })
+        .from("[data-name='versa']", { opacity: 0, scale: 0, stagger: 1 }, "<")
+        .to("[data-name='versa']", { opacity: 0, scale: 2, stagger: 1 }, "<+1");
+    }, main_content.current);
+    return () => context.revert();
+  }, []);
+  useLayoutEffect(() => {
+    scroll_func.current = function enableScrollTimeline() {
+      ScrollTrigger.create({
+        trigger: main_content.current,
+        start: "top top",
+        pin: true,
+        end: "+=" + window.innerHeight * 3,
+        animation: poem_tl.current,
+        scrub: 0.5,
+      });
+    };
   }, []);
 
   return (
     <div
-      className="relative grid min-h-screen w-full overflow-hidden   bg-[#cfc7984f] px-4 pb-40 text-black"
+      className="relative grid min-h-screen w-full place-content-center overflow-hidden  bg-[#cfc7984f]   text-black"
       ref={main_content}
-      data-scroll-section
     >
       <div className="absolute top-0 left-0 h-full w-full opacity-50">
         <img src={texture} alt="" className="h-full w-full object-cover" />
       </div>
-      {/* <div className="absolute right-1/3 top-0 h-40 w-40" ref={pavuk_ref}>
-        <img src={pavuk} alt="" className="h-full w-full object-contain" />
-      </div> */}
       <div
         className="absolute top-20 -right-32 h-44 w-80 scale-x-[-1] "
         data-name="mrak_static"
@@ -214,16 +292,16 @@ export const Pribeh_Pavuk = () => {
       >
         <img src={leave5} alt="" className="absolute h-full w-full" />
       </div>
-      <div
+      {/* <div
         className="absolute top-1/2 left-0 z-50 h-128 w-128"
         ref={sarkan_ref}
       >
         <img src={iba_sarkan} alt="" className="object-contain" />
-      </div>
+      </div> */}
       <div className="absolute top-2/3 right-0 h-80  w-80">
         <img src={vlakno} alt="" className="object-contain" />
       </div>
-      <div
+      {/* <div
         className=" z-40 mx-auto  grid w-full grid-cols-4 grid-rows-[100vh_repeat(9,1fr)] gap-y-24 gap-x-12  font-zaisloppy text-2xl font-black leading-normal tracking-wider text-[#3E434E]"
         ref={poem_container_ref}
       >
@@ -341,6 +419,111 @@ export const Pribeh_Pavuk = () => {
             začal siete tkať: <br />
             &#34;Musím sa len na seba spoliehať!&#34;
           </p>
+        </div>
+      </div> */}
+      {/* CIRCLE */}
+      {/* <div
+        className="circle fixed top-1/2 left-0 h-40 w-40 translate-y-[-50%] translate-x-[-50%] rounded-full bg-black"
+        ref={circle_ref}
+      ></div> */}
+      {/* ANIMATION WRAP */}
+      <div
+        className="animationWrapper relative flex items-center justify-center gap-12 overflow-hidden opacity-0"
+        ref={animationWrap_ref}
+      >
+        <div className="h-40 w-40" ref={pavuk_ref}>
+          <img src={pavuk} alt="" className="h-full w-full object-contain" />
+        </div>
+        <div className="content grid w-1/2 place-content-center overflow-hidden">
+          <div className="heading grid-area-1">
+            <h1
+              className=" text-shadow-lg  my-24 text-center font-forma-djr text-8xl uppercase tracking-wider"
+              ref={title_ref}
+            >
+              pavúk pútnik
+            </h1>
+          </div>
+          <div
+            className="poem grid-area-1 grid place-content-center font-zaisloppy text-2xl font-black leading-normal tracking-wider text-[#3E434E]"
+            ref={poem_ref}
+          >
+            <div data-name="vers" className="grid-area-1">
+              <p className=" perspective-1 indent-8 first-letter:text-6xl">
+                Slniečko sa níži <br />
+                a jeseň sa blíži. <br />
+                V zlatistých listoch viniča,
+                <br />
+                osy od slasti bzučia.
+              </p>
+            </div>
+            <div data-name="vers" className="grid-area-1">
+              <p>
+                Brušká majú plné sladu, <br />
+                no myslia i na dni hladu. <br />
+                Hniezda si stavajú <br />
+                k plástu plást, <br />
+                už ich je rovno sedemnásť.
+              </p>
+            </div>
+            <div data-name="vers" className="grid-area-1">
+              <p>
+                Len pavúk,ten má času dosť <br />
+                Súka a súka dlhé vlákna <br />
+                a na priaznivý vetrík čaká.
+                <br />
+                Chce ešte poznať nové svety, <br />v ústrety poznaniu letí.
+              </p>
+            </div>
+            <div data-name="vers" className="grid-area-1">
+              <p>
+                No nevšimol si milé deti, <br />
+                šarkana. <br />
+                Ten preťal vlákno,
+                <br />
+                babie leto, <br />
+                no pavúk je fifík zato.
+              </p>
+            </div>
+            <div data-name="vers" className="grid-area-1">
+              <p>
+                Sadol na chvost šarkana <br />a smeje sa: &#34;Chi-chi-cha,{" "}
+                <br />
+                Ani tkať mi netreba.
+              </p>
+            </div>
+            <div data-name="vers" className="grid-area-1">
+              <p>
+                Fičím si s vetrom opreteky, <br />
+                do úst mi letia drobné muchy <br />
+                Oj, to je radosť letieť het, <br />
+                ach, aký krásny je ten svet!&#34; <br />
+              </p>
+            </div>
+            <div data-name="vers" className="grid-area-1">
+              <p>
+                No v zábave nastal škrt, <br />
+                i pavúka krásna púť <br />
+                Šarkana stiahli dolu deti
+                <br />
+                a on už dolu bruškom letí.
+                <br />
+              </p>
+            </div>
+            <div data-name="versa" className="grid-area-1">
+              <p>
+                Do trávy spadol sýtozelenej <br />
+                a rýchlo učupil sa v nej, <br />
+                nezbedný čierny pasažier. <br />
+              </p>
+            </div>
+            <div data-name="versa" className="grid-area-1">
+              <p>
+                Keď lúka osirela, <br />
+                začal siete tkať: <br />
+                &#34;Musím sa len na seba spoliehať!&#34;
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -45,6 +45,9 @@
     perspective: 200px;
     perspective-origin: bottom;
   }
+  .grid-area-1 {
+    grid-area: 1/1;
+  }
   img {
     @apply h-full w-full;
   }
