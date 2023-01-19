@@ -47,6 +47,9 @@
   }
   .grid-area-1 {
     grid-area: 1/1;
+    display: grid;
+    grid-template-columns: max-content;
+    place-content: center;
   }
   img {
     @apply h-full w-full;
