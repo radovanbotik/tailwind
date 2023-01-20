@@ -1,24 +1,30 @@
 import React, { useState, useLayoutEffect, useRef } from "react";
 import slnko from "../assets/story_pavuk_putnik/Layer 1@1x.png";
-import mrak from "../assets/story_pavuk_putnik/Background copy 9@1x.png";
-import mrak2 from "../assets/story_pavuk_putnik/mrak2@1x.png";
-import mrak3 from "../assets/story_pavuk_putnik/mrak3@1x.png";
-import mrak4 from "../assets/clouds/cloud_1@1x.png";
-import mrak5 from "../assets/clouds/cloud_2@1x.png";
-import leave1 from "../assets/story_pavuk_putnik/leave1@1x.png";
-import leave2 from "../assets/story_pavuk_putnik/leave2@1x.png";
-import leave3 from "../assets/story_pavuk_putnik/leave3@1x.png";
-import leave4 from "../assets/story_pavuk_putnik/leave4@1x.png";
-import leave5 from "../assets/story_pavuk_putnik/leave5@1x.png";
+import mrak from "../assets/clouds/mrak-moving@1x.png";
+import mrakvlavo from "../assets/clouds/mrakvlavo@0.5x.png";
+import mrakvpravo from "../assets/clouds/mrakvpravo@0.5x.png";
+import mrak4 from "../assets/clouds/mrak-slate2@0.5x.png";
+
+import javor1 from "../assets/leaves/javor3@0.5x.png";
+import javor2 from "../assets/leaves/javor2@0.5x.png";
+import javor3 from "../assets/leaves/javor4@0.5x.png";
+import listvlavo1 from "../assets/leaves/list-vlavo3@0.5x.png";
+import listvpravo1 from "../assets/leaves/list-vpravo3@0.5x.png";
+
 import iba_sarkan from "../assets/story_pavuk_putnik/Background copy 4@1x.png";
 import pavuk from "../assets/story_pavuk_putnik/Background copy 8@1x.png";
 import pavuk_a_sarkan from "../assets/story_pavuk_putnik/sarkan@1x.png";
 import vlakno from "../assets/story_pavuk_putnik/Background copy 5@1x.png";
 import trava from "../assets/story_pavuk_putnik/trava.png";
-import texture from "../assets/for-bg/paper_mulberry.jpg";
+import papier_recyklovany from "../assets/for-bg/papier_recyklovany@1x-min.png";
+import papier_recyklovany_mini from "../assets/Minified/bg/papier_recyklovany@0.5x-min.png";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+import { radius, fullWidth, percentIncrease } from "../utility/getCircle";
+import { pavuk_putnik } from "../data/pavuk_putnik";
+
+import { OptImage } from "./OptImage";
 
 export const Pribeh_Pavuk = () => {
   gsap.registerPlugin(MotionPathPlugin);
@@ -27,48 +33,22 @@ export const Pribeh_Pavuk = () => {
   //elements
   const pavuk_ref = useRef(null);
   const sarkan_ref = useRef(null);
+  const sarkan_pavuk_ref = useRef(null);
   const mrak_ref = useRef(null);
   const leave1_ref = useRef(null);
-  const root_ref = useRef(null);
   const slnko_ref = useRef(null);
   const title_ref = useRef(null);
   const main_content = useRef(null);
   const animationWrap_ref = useRef(null);
   const poem_ref = useRef(null);
-  const vers1_ref = useRef(null);
-  const vers2_ref = useRef(null);
-  const vers3_ref = useRef(null);
-  const vers4_ref = useRef(null);
-  const vers5_ref = useRef(null);
-  const vers6_ref = useRef(null);
-  const vers7_ref = useRef(null);
-  const vers8_ref = useRef(null);
-  const vers9_ref = useRef(null);
 
   const circle_ref = useRef();
   //timelines
   const mrak_tl = useRef(null);
-  const static_mrak_tl = useRef(null);
   const intro_tl = useRef(null);
   const poem_tl = useRef(null);
   const scroll_func = useRef(null);
   const leaves_tl = useRef(null);
-
-  //Utility Function
-  let centerX = window.innerWidth / 2;
-  let centerY = window.innerHeight / 2;
-
-  Math.getDistance = function (x1, y1, x2, y2) {
-    var xs = x2 - x1,
-      ys = y2 - y1;
-    xs *= xs;
-    ys *= ys;
-    return Math.sqrt(xs + ys);
-  };
-
-  let radius = Math.getDistance(0, 0, centerX, centerY);
-  let fullWidth = radius * 2;
-  let percentIncrease = fullWidth / 100;
 
   useLayoutEffect(() => {
     mrak_tl.current = gsap.timeline().to(mrak_ref.current, {
@@ -153,7 +133,6 @@ export const Pribeh_Pavuk = () => {
       // );
       intro_tl.current = gsap
         .timeline({ onComplete: scroll_func.current })
-
         .to(circle_ref.current, {
           x: "90vw",
           duration: 1,
@@ -167,6 +146,17 @@ export const Pribeh_Pavuk = () => {
         })
         .set(main_content.current, { backgroundColor: "#96906e4f" })
         .to(".images", { opacity: 1 })
+        .from(
+          '[data-name="leaf"]',
+          {
+            opacity: 0,
+            xPercent: 300,
+            y: -200,
+            rotate: -50,
+            stagger: 0.2,
+          },
+          ">"
+        )
         .set("[data-name='vers']", { opacity: 0, y: -200 }, 0)
         .set(animationWrap_ref.current, { opacity: 1 })
         .from(
@@ -174,11 +164,11 @@ export const Pribeh_Pavuk = () => {
           { xPercent: -100, opacity: 0, duration: 1 },
           "<"
         )
-        .from(
-          pavuk_ref.current,
-          { scale: 0.3, opacity: 0, duration: 0.5, y: -500 },
-          "<+0.5"
-        )
+        // .from(
+        //   pavuk_ref.current,
+        //   { scale: 0.3, opacity: 0, duration: 0.5, y: -500 },
+        //   "<+0.5"
+        // )
 
         .duration(5);
     }, main_content.current);
@@ -189,31 +179,57 @@ export const Pribeh_Pavuk = () => {
       poem_tl.current = gsap
         .timeline({ paused: true })
         .to(title_ref.current, { y: 100, opacity: 0 })
-        .to(pavuk_ref.current, { y: 100, opacity: 0 }, 0)
+        // .to(pavuk_ref.current, { y: 100, opacity: 0 }, 0)
+        .to("[data-id='vers-1']", { opacity: 1, y: 0 }, "<")
+        .to(
+          '[data-name="leaf"]',
+          {
+            opacity: 0,
+            scale: 0.5,
+            xPercent: -300,
+            stagger: 0.5,
+          },
+          ">"
+        )
+        .to(slnko_ref.current, { opacity: 0 }, ">")
+        .to("[data-id='vers-1']", { opacity: 0, y: 200 }, "<+2")
+        .to("[data-id='vers-2']", { opacity: 1, y: 0 }, "<")
+        .to("[data-id='vers-2']", { opacity: 0, y: 200 }, "<+1")
+        .to("[data-id='vers-3']", { opacity: 1, y: 0 }, "<")
+        .to("[data-id='vers-3']", { opacity: 0, y: 200 }, "<+1")
+        .to("[data-id='vers-4']", { opacity: 1, y: 0 }, "<")
+        .to("[data-id='vers-4']", { opacity: 0, y: 200 }, "<+1")
+        .to("[data-id='vers-5']", { opacity: 1, y: 0 }, "<")
+        .fromTo(
+          sarkan_pavuk_ref.current,
+          { xPercent: -100, opacity: 1 },
+          {
+            y: -200,
+            x: 500,
 
-        // .set(poem_ref.current, { opacity: 1 }, "<")
-        .to(vers1_ref.current, { opacity: 1, y: 0 }, "<")
-        .to(vers1_ref.current, { opacity: 0, y: 200 }, "<+1")
-        .to(slnko_ref.current, { opacity: 0 })
-        .to(vers2_ref.current, { opacity: 1, y: 0 }, "<")
-        .to(vers2_ref.current, { opacity: 0, y: 200 }, "<+1")
-        .to(vers3_ref.current, { opacity: 1, y: 0 }, "<")
-        .to(vers3_ref.current, { opacity: 0, y: 200 }, "<+1")
-        .to(vers4_ref.current, { opacity: 1, y: 0 }, "<")
-        .to(vers4_ref.current, { opacity: 0, y: 200 }, "<+1")
-        .to(vers5_ref.current, { opacity: 1, y: 0 }, "<")
-        .to(vers5_ref.current, { opacity: 0, y: 200 }, "<+1")
-        .to(vers6_ref.current, { opacity: 1, y: 0 }, "<")
-        .to(vers6_ref.current, { opacity: 0, y: 200 }, "<+1")
-        .to(vers7_ref.current, { opacity: 1, y: 0 }, "<")
-        .to(vers7_ref.current, { opacity: 0, y: 200 }, "<+1")
-        .to(vers8_ref.current, { opacity: 1, y: 0 }, "<")
-        .to(vers8_ref.current, { opacity: 0, y: 200 }, "<+1")
-        .to(vers9_ref.current, { opacity: 1, y: 0 }, "<")
-        .to(vers9_ref.current, { opacity: 0, y: 200 }, "<+1");
-      // .from("[data-name='vers']", { opacity: 0, y: -200, stagger: 1 }, "<")
-      // .to("[data-name='vers']", { opacity: 0, stagger: 1 }, "<+1")
-      // .to(slnko_ref.current, { opacity: 0 });
+            duration: 5,
+          }
+        )
+        .to(sarkan_pavuk_ref.current, { rotate: 45 })
+        .to(sarkan_pavuk_ref.current, { x: 1000, y: 0, duration: 5 })
+        .to(sarkan_pavuk_ref.current, {
+          rotate: 0,
+          x:
+            main_content.current.getBoundingClientRect().width +
+            sarkan_pavuk_ref.current.getBoundingClientRect().width,
+          y: 0,
+          duration: 5,
+        })
+
+        .to("[data-id='vers-5']", { opacity: 0, y: 200 })
+        .to("[data-id='vers-6']", { opacity: 1, y: 0 }, "<")
+        .to("[data-id='vers-6']", { opacity: 0, y: 200 }, "<+1")
+        .to("[data-id='vers-7']", { opacity: 1, y: 0 }, "<")
+        .to("[data-id='vers-7']", { opacity: 0, y: 200 }, "<+1")
+        .to("[data-id='vers-8']", { opacity: 1, y: 0 }, "<")
+        .to("[data-id='vers-8']", { opacity: 0, y: 200 }, "<+1")
+        .to("[data-id='vers-9']", { opacity: 1, y: 0 }, "<")
+        .to("[data-id='vers-9']", { opacity: 0, y: 200 }, "<+1");
     }, main_content.current);
     return () => context.revert();
   }, []);
@@ -235,19 +251,20 @@ export const Pribeh_Pavuk = () => {
       className="relative  mx-auto grid min-h-screen w-full  max-w-7xl place-content-center  overflow-hidden bg-white text-[#3E434E]"
       ref={main_content}
     >
-      {/* <div className=" absolute top-1/2 left-0 h-40 w-40" ref={pavuk_ref}>
-        <img src={pavuk} alt="" className="h-full w-full object-contain" />
-      </div> */}
-
       <div className="images h-full w-full  opacity-0">
-        <div className="absolute top-0 left-0 h-full w-full opacity-50">
-          <img src={texture} alt="" className="h-full w-full object-cover" />
+        <div className="absolute top-0 left-0 h-full w-full ">
+          <OptImage
+            source={papier_recyklovany}
+            placeholder={papier_recyklovany_mini}
+            alt={"pozadie"}
+            cover={true}
+          />
         </div>
         <div
           className="absolute top-20 -right-32 h-44 w-80 scale-x-[-1] "
           data-name="mrak_static"
         >
-          <img src={mrak2} alt="" className="object-contain" />
+          <img src={mrakvlavo} alt="" className="object-contain" />
         </div>
         <div className="absolute -right-10 -top-10 h-36 w-60" ref={slnko_ref}>
           <img src={slnko} alt="" className="object-contain" />
@@ -262,7 +279,7 @@ export const Pribeh_Pavuk = () => {
           className="absolute top-10 left-0 h-36 w-48 scale-x-[-1]"
           data-name="mrak_static"
         >
-          <img src={mrak3} alt="" className="object-contain" />
+          <img src={mrakvpravo} alt="" className="object-contain" />
         </div>
         <div className="absolute left-0 top-5 h-52 w-96 " ref={mrak_ref}>
           <img src={mrak} alt="" className="object-contain" />
@@ -279,7 +296,7 @@ export const Pribeh_Pavuk = () => {
           data-id="leaf-1"
         >
           <img
-            src={leave1}
+            src={javor1}
             alt=""
             className="object-contain"
             data-type="leaf"
@@ -292,45 +309,45 @@ export const Pribeh_Pavuk = () => {
           data-id="leaf-2"
         >
           <img
-            src={leave2}
+            src={javor2}
             alt=""
             className="object-contain"
             data-type="leaf"
           />
         </div>
         <div
-          className="absolute left-1/3 top-3/4 h-20 w-24"
+          className="absolute left-1/3 top-3/4 h-16 w-16"
           data-name="leaf"
           data-id="leaf-3"
         >
           <img
-            src={leave3}
+            src={listvlavo1}
             alt=""
             className="object-contain"
             data-type="leaf"
           />
         </div>
         <div
-          className="absolute top-1/3 left-1/2 h-12 w-24"
+          className="absolute top-1/3 left-1/2 h-16 w-24"
           data-name="leaf"
           data-id="leaf-4"
         >
           <img
-            src={leave4}
+            src={javor3}
             alt=""
             className="object-contain"
             data-type="leaf"
           />
         </div>
         <div
-          className="absolute right-44 top-2/3 h-16 w-16"
+          className="absolute right-44 top-2/3 h-12 w-12"
           data-name="leaf"
           data-id="leaf-5"
         >
           <img
-            src={leave5}
+            src={listvpravo1}
             alt=""
-            className="absolute h-full w-full"
+            className="object-contain"
             data-type="leaf"
           />
         </div>
@@ -344,13 +361,18 @@ export const Pribeh_Pavuk = () => {
             className="h-full w-full object-cover object-top"
           />
         </div>
+        <div
+          className="absolute top-1/2 left-0 z-50 h-96 w-96 opacity-0"
+          ref={sarkan_pavuk_ref}
+        >
+          <img
+            src={pavuk_a_sarkan}
+            alt=""
+            className="h-full w-full object-contain"
+          />
+        </div>
       </div>
-      {/* <div
-        className="absolute top-1/2 left-0 z-50 h-128 w-128"
-        ref={sarkan_ref}
-      >
-        <img src={iba_sarkan} alt="" className="object-contain" />
-      </div> */}
+
       {/* CIRCLE */}
       <div
         className="circle fixed top-1/2 left-0 h-40 w-40 translate-y-[-50%] translate-x-[-50%] rounded-full bg-black"
@@ -361,8 +383,8 @@ export const Pribeh_Pavuk = () => {
         className="animationWrapper relative flex items-center justify-center gap-12 overflow-hidden opacity-0"
         ref={animationWrap_ref}
       >
-        <div className="h-40 w-40" ref={pavuk_ref}>
-          <img src={pavuk} alt="" className="h-full w-full object-contain" />
+        <div className="hidden h-40 w-40 opacity-0 " ref={pavuk_ref}>
+          <img src={pavuk} alt="" className="h-full w-full object-contain " />
         </div>
         <div className="content grid w-full place-content-center overflow-hidden">
           <div className="heading grid-area-1">
@@ -374,85 +396,21 @@ export const Pribeh_Pavuk = () => {
             </h1>
           </div>
           <div
-            className="poem grid-area-1 grid w-full  place-content-center font-zaisloppy text-4xl font-black leading-normal tracking-wider text-[#3E434E]"
+            className="poem grid-area-1 grid w-full  place-content-center text-center font-zaisloppy text-4xl font-black leading-normal tracking-wider text-[#3E434E]"
             ref={poem_ref}
           >
-            <div data-name="vers" className="grid-area-1" ref={vers1_ref}>
-              <p className=" perspective-1 indent-8 first-letter:text-6xl">
-                Slniečko sa níži <br />
-                a jeseň sa blíži. <br />
-                V zlatistých listoch viniča,
-                <br />
-                osy od slasti bzučia.
-              </p>
-            </div>
-            <div data-name="vers" className="grid-area-1" ref={vers2_ref}>
-              <p>
-                Brušká majú plné sladu, <br />
-                no myslia i na dni hladu. <br />
-                Hniezda si stavajú <br />
-                k plástu plást, <br />
-                už ich je rovno sedemnásť.
-              </p>
-            </div>
-            <div data-name="vers" className="grid-area-1" ref={vers3_ref}>
-              <p>
-                Len pavúk,ten má času dosť <br />
-                Súka a súka dlhé vlákna <br />
-                a na priaznivý vetrík čaká.
-                <br />
-                Chce ešte poznať nové svety, <br />v ústrety poznaniu letí.
-              </p>
-            </div>
-            <div data-name="vers" className="grid-area-1" ref={vers4_ref}>
-              <p>
-                No nevšimol si milé deti, <br />
-                šarkana. <br />
-                Ten preťal vlákno,
-                <br />
-                babie leto, <br />
-                no pavúk je fifík zato.
-              </p>
-            </div>
-            <div data-name="vers" className="grid-area-1" ref={vers5_ref}>
-              <p>
-                Sadol na chvost šarkana <br />a smeje sa: &#34;Chi-chi-cha,{" "}
-                <br />
-                Ani tkať mi netreba.
-              </p>
-            </div>
-            <div data-name="vers" className="grid-area-1" ref={vers6_ref}>
-              <p>
-                Fičím si s vetrom opreteky, <br />
-                do úst mi letia drobné muchy <br />
-                Oj, to je radosť letieť het, <br />
-                ach, aký krásny je ten svet!&#34; <br />
-              </p>
-            </div>
-            <div data-name="vers" className="grid-area-1" ref={vers7_ref}>
-              <p>
-                No v zábave nastal škrt, <br />
-                i pavúka krásna púť <br />
-                Šarkana stiahli dolu deti
-                <br />
-                a on už dolu bruškom letí.
-                <br />
-              </p>
-            </div>
-            <div data-name="vers" className="grid-area-1" ref={vers8_ref}>
-              <p>
-                Do trávy spadol sýtozelenej <br />
-                a rýchlo učupil sa v nej, <br />
-                nezbedný čierny pasažier. <br />
-              </p>
-            </div>
-            <div data-name="vers" className="grid-area-1" ref={vers9_ref}>
-              <p>
-                Keď lúka osirela, <br />
-                začal siete tkať: <br />
-                &#34;Musím sa len na seba spoliehať!&#34;
-              </p>
-            </div>
+            {pavuk_putnik.map((obj, index) => {
+              return (
+                <div
+                  data-name="vers"
+                  data-id={`vers-${index + 1}`}
+                  className="grid-area-1 whitespace-pre-line"
+                  key={index}
+                >
+                  <p>{obj.vers}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

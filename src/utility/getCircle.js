@@ -13,3 +13,5 @@ Math.getDistance = function (x1, y1, x2, y2) {
 let radius = Math.getDistance(0, 0, centerX, centerY);
 let fullWidth = radius * 2;
 let percentIncrease = fullWidth / 100;
+
+export { radius, fullWidth, percentIncrease };
