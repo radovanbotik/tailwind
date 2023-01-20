@@ -3,7 +3,7 @@ import { Pribeh_Pavuk } from "../components/Pribeh_Pavuk";
 
 export const Frontpage = () => {
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden ">
       <Pribeh_Pavuk />
     </div>
   );
